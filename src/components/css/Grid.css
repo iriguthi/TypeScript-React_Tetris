@@ -1,0 +1,27 @@
+.grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-row {
+  display: flex;
+}
+
+.grid-cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #8a8a8a;
+  /* background-color: white; */
+}
+
+/* .filled {
+  background-color: gray;
+} */
+
+.filled-1 { background-color: cyan; }
+.filled-2 { background-color: blue; }
+.filled-3 { background-color: orange; }
+.filled-4 { background-color: yellow; }
+.filled-5 { background-color: green; }
+.filled-6 { background-color: purple; }
+.filled-7 { background-color: red; }

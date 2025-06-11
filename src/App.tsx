@@ -12,6 +12,7 @@ function App() {
   const[grid, setGrid] = useState(initialGrid);
 
   const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(randomTetromino());
+  const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 // console.log(currentTetromino)
   // 表示用グリッド：固定グリッド+現在のテトロミノを合成し出力
   const displayGrid = useMemo(() => {
@@ -31,6 +32,7 @@ function App() {
     return newGrid;
   }, [grid, currentTetromino]);
 
+  // 落下処理(1秒ごとにY座標1ずつ落下)
   useEffect(() => {
   const timer = setInterval(() => {
     setCurrentTetromino(prev => {
@@ -38,31 +40,38 @@ function App() {
         // 移動可能なら落下させる
         return { ...prev, y: prev.y + 1 };
       } else {
+        // 固定処理
         const newGrid = grid.map(row => [...row]);
-    prev.shape.forEach((row, dy) => {
-      row.forEach((cell, dx) => {
-        if (cell) {
-          const x = prev.x + dx;
-          const y = prev.y + dy;
-          if (y >= 0 && y < newGrid.length && x >= 0 && x < newGrid[0].length) {
-            newGrid[y][x] = prev.colorCode;
-          }
-        }
-      });
-    });
+        prev.shape.forEach((row, dy) => {
+          row.forEach((cell, dx) => {
+            if (cell) {
+              const x = prev.x + dx;
+              const y = prev.y + dy;
+              if (y >= 0 && y < newGrid.length && x >= 0 && x < newGrid[0].length) {
+                newGrid[y][x] = prev.colorCode;
+              }
+            }
+          });
+        });
 
-    // グリッドを更新
-    setGrid(newGrid);
-
-    // 次のテトロミノを生成
-    const next = randomTetromino();
-    return next;
+        // グリッドを更新
+        setGrid(newGrid);
+        setShouldGenerateNewTetromino(true);
+        return prev;
       }
     });
   }, 1000);
 
   return () => clearInterval(timer);
   }, [grid]);
+
+  // 次のテトロミノを生成
+  useEffect(() => {
+  if (shouldGenerateNewTetromino) {
+    setCurrentTetromino(randomTetromino());
+    setShouldGenerateNewTetromino(false);
+  }
+}, [shouldGenerateNewTetromino]);
 
   return (
     <div className="main_container">

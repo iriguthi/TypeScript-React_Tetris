@@ -46,14 +46,3 @@ export const TETROMINOS: Tetromino[] = [
     [1, 1, 1]
   ], x: 0, y: 0, colorCode: 2 },
 ];
-
-// ランダム生成
-export function randomTetromino(): Tetromino {
-  const random = Math.floor(Math.random() * TETROMINOS.length);
-  const tetromino = {...TETROMINOS[random]};
-
-  // 中央で生成
-  const tetrominoWidth = tetromino.shape[0]?.length ?? 1;
-  tetromino.x = Math.floor((gridWidth - tetrominoWidth) / 2);
-  return tetromino
-}

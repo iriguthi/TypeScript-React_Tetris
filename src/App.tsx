@@ -3,15 +3,15 @@ import { useState, useMemo, useEffect } from 'react'
 // import viteLogo from '/vite.svg'
 import './App.css'
 import Grid from './components/Grid'
-import { Tetromino, randomTetromino } from './components/Tetromino';
-import { canMove } from './logic/TetrominoLogic';
+import { Tetromino } from './components/Tetromino';
+import { initialGrid, randomTetromino, dropTetromino, nextTetromino } from './logic/gameLogic';
 import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
 
 function App() {
-  // 20×10の初期盤面を0で初期化
-  const initialGrid = Array.from({ length: 20 }, () => Array(10).fill(0));
+  // 20×10の盤面のステータス
   const[grid, setGrid] = useState(initialGrid);
 
+  // テトロミノのステータス
   const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(randomTetromino());
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 // console.log(currentTetromino)
@@ -33,44 +33,18 @@ function App() {
     return newGrid;
   }, [grid, currentTetromino]);
 
-  // 落下処理(1秒ごとにY座標1ずつ落下)
+  // 落下処理
   useEffect(() => {
   const timer = setInterval(() => {
-    setCurrentTetromino(prev => {
-      if (canMove(grid, prev, 0, 1)) {
-        // 移動可能なら落下させる
-        return { ...prev, y: prev.y + 1 };
-      } else {
-        // 固定処理
-        const newGrid = grid.map(row => [...row]);
-        prev.shape.forEach((row, dy) => {
-          row.forEach((cell, dx) => {
-            if (cell) {
-              const x = prev.x + dx;
-              const y = prev.y + dy;
-              if (y >= 0 && y < newGrid.length && x >= 0 && x < newGrid[0].length) {
-                newGrid[y][x] = prev.colorCode;
-              }
-            }
-          });
-        });
-
-        // グリッドを更新
-        setGrid(newGrid);
-        setShouldGenerateNewTetromino(true);
-        return prev;
-      }
-    });
+    dropTetromino(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino);
   }, 1000);
-
-  return () => clearInterval(timer);
-  }, [grid]);
+  return () => clearInterval(timer)
+  }, [grid, currentTetromino]);
 
   // 次のテトロミノを生成
   useEffect(() => {
     if (shouldGenerateNewTetromino) {
-      setCurrentTetromino(randomTetromino());
-      setShouldGenerateNewTetromino(false);
+      nextTetromino(setCurrentTetromino, setShouldGenerateNewTetromino);
     }
   }, [shouldGenerateNewTetromino]);
 
@@ -97,10 +71,10 @@ function App() {
           <p>Next</p>
           <div id="next_tetromino" className="next_tetromino_box"></div>
         </div> */}
-        {/* <div className="score">
+        <div className="score">
           <p>Score</p>
           <p id="score">0</p>
-        </div> */}
+        </div>
         <div className="operation">
           <p>操作</p>
           <p>↑：回転</p>

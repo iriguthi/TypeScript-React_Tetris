@@ -1,3 +1,4 @@
+
 import { Tetromino } from "./Tetromino";
 
 // テトロミノ移動可否
@@ -30,4 +31,3 @@ export function canMove(
   });
 }
 
-// 操作系

@@ -5,6 +5,7 @@ import './App.css'
 import Grid from './components/Grid'
 import { Tetromino, randomTetromino } from './components/Tetromino';
 import { canMove } from './components/TetrominoLogic';
+import { handleKeyPressLogic } from './components/handleKeyPressLogic';
 
 function App() {
   // 20×10の初期盤面を0で初期化
@@ -67,11 +68,23 @@ function App() {
 
   // 次のテトロミノを生成
   useEffect(() => {
-  if (shouldGenerateNewTetromino) {
-    setCurrentTetromino(randomTetromino());
-    setShouldGenerateNewTetromino(false);
-  }
-}, [shouldGenerateNewTetromino]);
+    if (shouldGenerateNewTetromino) {
+      setCurrentTetromino(randomTetromino());
+      setShouldGenerateNewTetromino(false);
+    }
+  }, [shouldGenerateNewTetromino]);
+
+  // 操作系
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      handleKeyPressLogic(event, currentTetromino, setCurrentTetromino, grid);
+    };
+
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, [currentTetromino, grid])
 
   return (
     <div className="main_container">

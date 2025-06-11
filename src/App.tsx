@@ -93,20 +93,20 @@ function App() {
         <Grid grid={displayGrid} />
       </div>
       <div className="side_container">
-        <div className="next_container">
+        {/* <div className="next_container">
           <p>Next</p>
           <div id="next_tetromino" className="next_tetromino_box"></div>
-        </div>
-        <div className="score">
+        </div> */}
+        {/* <div className="score">
           <p>Score</p>
           <p id="score">0</p>
-        </div>
+        </div> */}
         <div className="operation">
           <p>操作</p>
           <p>↑：回転</p>
           <p>← →：左右移動</p>
           <p>↓：落下</p>
-          <p>SPACE：一時停止</p>
+          {/* <p>SPACE：一時停止</p> */}
         </div>
       </div>
     </div>

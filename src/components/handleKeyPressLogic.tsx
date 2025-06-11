@@ -1,4 +1,4 @@
-import { canMove } from "./TetrominoLogic";
+import { canMove, canRotate, rotateTetromino } from "./TetrominoLogic";
 import { Tetromino } from "./Tetromino";
 
 // 操作系
@@ -23,7 +23,9 @@ export function handleKeyPressLogic(
       break;
     case "ArrowUp":
       // 回転
-      console.log('上')
+      if (canRotate(grid, currentTetromino)) {
+        setCurrentTetromino(prev => rotateTetromino(grid, prev));
+      }
       break;
     case "ArrowDown":
       // 右移動

@@ -4,8 +4,8 @@ import { useState, useMemo, useEffect } from 'react'
 import './App.css'
 import Grid from './components/Grid'
 import { Tetromino, randomTetromino } from './components/Tetromino';
-import { canMove } from './components/TetrominoLogic';
-import { handleKeyPressLogic } from './components/handleKeyPressLogic';
+import { canMove } from './logic/TetrominoLogic';
+import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
 
 function App() {
   // 20×10の初期盤面を0で初期化

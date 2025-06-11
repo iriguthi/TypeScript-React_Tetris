@@ -1,4 +1,4 @@
-import { Tetromino } from "./Tetromino";
+import { Tetromino } from "../components/Tetromino";
 
 // テトロミノ移動可否
 export function canMove(

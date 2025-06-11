@@ -1,5 +1,5 @@
 import { canMove, canRotate, rotateTetromino } from "./TetrominoLogic";
-import { Tetromino } from "./Tetromino";
+import { Tetromino } from "../components/Tetromino";
 
 // 操作系
 export function handleKeyPressLogic(

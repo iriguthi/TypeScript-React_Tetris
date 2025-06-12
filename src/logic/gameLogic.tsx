@@ -19,27 +19,39 @@ export function randomTetromino(): Tetromino {
   return tetromino;
 }
 
+// 既に生成地点にテトロミノゲーム内時間を止める
+export function dropInterval(
+  gameOver: boolean
+) {
+  let interval = 1000;
+  if(gameOver){
+    interval = 0;
+  }
+  return interval;
+}
+
 // テトロミノ落下(1秒ごとにY座標1ずつ落下)
 export function dropTetromino(
   grid: number[][],
   setGrid: React.Dispatch<React.SetStateAction<number[][]>>,
-  tetromino: Tetromino,
+  currentTetromino: Tetromino,
   setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
   setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
-  if (canMove(grid, tetromino, 0, 1)) {
+  // console.log(grid)
+  if (canMove(grid, currentTetromino, 0, 1)) {
     // 移動可能なら落下させる
     setTetromino(prev =>({...prev, y:prev.y + 1}));
   } else {
     // 固定処理
     const upDateGrid = grid.map(row => [...row]);
-    tetromino.shape.forEach((row, dy) => {
+    currentTetromino.shape.forEach((row, dy) => {
       row.forEach((cell, dx) => {
         if (cell) {
-          const x = tetromino.x + dx;
-          const y = tetromino.y + dy;
+          const x = currentTetromino.x + dx;
+          const y = currentTetromino.y + dy;
           if (y >= 0 && y < upDateGrid.length && x >= 0 && x < upDateGrid[0].length) {
-            upDateGrid[y][x] = tetromino.colorCode;
+            upDateGrid[y][x] = currentTetromino.colorCode;
           }
         }
       });
@@ -52,13 +64,38 @@ export function dropTetromino(
   }
 }
 
+// テトロミノ生成個所に既にテトロミノが存在していないか
+export function spawnCollision(
+  grid: number[][],
+  nextTetromino: Tetromino,
+) {
+  for (let y = 0; y < nextTetromino.shape.length; y++ ) {
+    for (let x = 0; x <nextTetromino.shape[y].length; x++ ) {
+      if (nextTetromino.shape[y][x] !== 0 && grid[nextTetromino.y + y][nextTetromino.x + x] !== 0) {
+        // 既に生成場所にテトロミノがあるかつ盤面が埋まってるときtrueで返す
+        return true
+      }
+    }
+  }
+  return false
+}
+
 // 次のテトロミノを生成
 export function nextTetromino(
+  grid: number[][],
+  gameOver: React.Dispatch<React.SetStateAction<boolean>>,
   setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
   setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
-  setTetromino(randomTetromino());
-  setShouldGenerateNewTetromino(false);
+  const newTetromino = randomTetromino();
+  if(spawnCollision(grid, newTetromino)) {
+    // 既に生成場所にテトロミノがある場合
+    alert("GAME OVER");
+    gameOver(true);
+  } else {
+    setTetromino(newTetromino);
+    setShouldGenerateNewTetromino(false);
+  }
 }
 
 // 揃ったラインの削除

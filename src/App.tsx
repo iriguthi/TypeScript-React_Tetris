@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from 'react'
 import './App.css'
 import Grid from './components/Grid'
 import { Tetromino } from './components/Tetromino';
-import { initialGrid, randomTetromino, dropTetromino, nextTetromino } from './logic/gameLogic';
+import { initialGrid, randomTetromino, dropTetromino, nextTetromino, dropInterval } from './logic/gameLogic';
 import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
 
 function App() {
@@ -14,6 +14,10 @@ function App() {
   // テトロミノのステータス
   const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(randomTetromino());
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
+
+  // ゲームステータス
+  const [gameOver, setGameOver] = useState(false);
+
 // console.log(currentTetromino)
   // 表示用グリッド：固定グリッド+現在のテトロミノを合成し出力
   const displayGrid = useMemo(() => {
@@ -37,14 +41,14 @@ function App() {
   useEffect(() => {
   const timer = setInterval(() => {
     dropTetromino(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino);
-  }, 1000);
+  }, dropInterval(gameOver));
   return () => clearInterval(timer)
   }, [grid, currentTetromino]);
 
   // 次のテトロミノを生成
   useEffect(() => {
     if (shouldGenerateNewTetromino) {
-      nextTetromino(setCurrentTetromino, setShouldGenerateNewTetromino);
+      nextTetromino(grid, setGameOver, setCurrentTetromino, setShouldGenerateNewTetromino);
     }
   }, [shouldGenerateNewTetromino]);
 
@@ -58,11 +62,11 @@ function App() {
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, [currentTetromino, grid])
+  }, [currentTetromino, grid]);
 
   return (
     <div className="main_container">
-      <div id="tetris_container" className="grid">
+      <div className="grid">
         {/* Tetrisのゲーム盤を表示 */}
         <Grid grid={displayGrid} />
       </div>

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
@@ -16,7 +16,7 @@ function App() {
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 
   // ゲームステータス
-  const [gameOver, setGameOver] = useState(false);
+  const [gameState, setGameState] = useState(false);
 
 // console.log(currentTetromino)
   // 表示用グリッド：固定グリッド+現在のテトロミノを合成し出力
@@ -41,28 +41,36 @@ function App() {
   useEffect(() => {
   const timer = setInterval(() => {
     dropTetromino(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino);
-  }, dropInterval(gameOver));
+  }, dropInterval(gameState));
   return () => clearInterval(timer)
   }, [grid, currentTetromino]);
 
   // 次のテトロミノを生成
   useEffect(() => {
     if (shouldGenerateNewTetromino) {
-      nextTetromino(grid, setGameOver, setCurrentTetromino, setShouldGenerateNewTetromino);
+      nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino);
     }
   }, [shouldGenerateNewTetromino]);
 
   // 操作系
+  // 毎回最新の状態を保持させる(二重発火させない為)
+  const currentTetrominoRef = useRef(currentTetromino);
+  const gridRef = useRef(grid);
+  useEffect(() => {
+    currentTetrominoRef.current = currentTetromino;
+    gridRef.current = grid;
+  }, [currentTetromino, grid]);
+
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
-      handleKeyPressLogic(event, currentTetromino, setCurrentTetromino, grid);
+      handleKeyPressLogic(event, currentTetrominoRef.current, setCurrentTetromino, gridRef.current);
     };
 
     document.addEventListener("keydown", listener);
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, [currentTetromino, grid]);
+  }, []);
 
   return (
     <div className="main_container">

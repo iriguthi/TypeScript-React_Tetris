@@ -24,7 +24,8 @@ export function handleKeyPressLogic(
     case "ArrowUp":
       // 回転
       if (canRotate(grid, currentTetromino)) {
-        setCurrentTetromino(prev => rotateTetromino(grid, prev));
+        const rotated = rotateTetromino(grid, currentTetromino)
+        setCurrentTetromino(rotated);
       }
       break;
     case "ArrowDown":

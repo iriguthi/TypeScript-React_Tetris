@@ -10,13 +10,14 @@ export function initialGrid() {
 // テトロミノ生成
 // 7種のテトロミノをランダムで生成
 export function randomTetromino(): Tetromino {
-  // const random = Math.floor(Math.random() * TETROMINOS.length);
-  const random = 1
+  const random = Math.floor(Math.random() * TETROMINOS.length);
+  // const random = 1
   const tetromino = {...TETROMINOS[random]};
 
   // 中央で生成
   const tetrominoWidth = tetromino.shape[0]?.length ?? 1;
   tetromino.x = Math.floor((gridWidth - tetrominoWidth) / 2);
+  tetromino.y = -2
   return tetromino;
 }
 
@@ -113,14 +114,16 @@ export function clearLine(grid: number[][]):{
   const lineClear = grid.length - keepGrid.length;
 
   if (lineClear === 4){
-    score += (lineClear * 1.5) * 100;
+    score += Math.floor(lineClear * 1.5) * 100;
   } else if (lineClear === 3) {
-    score += (lineClear * 1.4) * 100;
-  }else {
+    score += Math.floor(lineClear * 1.4) * 100;
+  } else if (lineClear === 2) {
+    score += Math.floor(lineClear * 1.4) * 100;
+  } else {
     score += lineClear * 100;
   }
   // console.log(score)
-  document.getElementById("score")!.innerText =  `${score}`
+  document.getElementById("score")!.innerText = `${score}`
 
   // 盤面の削除した分を追加
   const newRenderGrid = Array.from({length: lineClear},() =>

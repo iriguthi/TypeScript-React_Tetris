@@ -10,7 +10,8 @@ export function initialGrid() {
 // テトロミノ生成
 // 7種のテトロミノをランダムで生成
 export function randomTetromino(): Tetromino {
-  const random = Math.floor(Math.random() * TETROMINOS.length);
+  // const random = Math.floor(Math.random() * TETROMINOS.length);
+  const random = 1
   const tetromino = {...TETROMINOS[random]};
 
   // 中央で生成
@@ -20,13 +21,16 @@ export function randomTetromino(): Tetromino {
 }
 
 // 既に生成地点にテトロミノゲーム内時間を止める
+let interval = 1000;
 export function dropInterval(
   gameOver: boolean
 ) {
-  let interval = 1000;
   if(gameOver){
     interval = 0;
   }
+  // スコア1000pt毎に100msずつインターバルを更新
+  interval = Math.max(1000 - Math.floor(score / 1000) * 100, 100);
+  // console.log(interval)
   return interval;
 }
 
@@ -109,8 +113,10 @@ export function clearLine(grid: number[][]):{
   const lineClear = grid.length - keepGrid.length;
 
   if (lineClear === 4){
-    score = (lineClear * 1.5) * 100;
-  } else {
+    score += (lineClear * 1.5) * 100;
+  } else if (lineClear === 3) {
+    score += (lineClear * 1.4) * 100;
+  }else {
     score += lineClear * 100;
   }
   // console.log(score)

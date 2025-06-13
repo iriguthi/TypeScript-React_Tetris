@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Iriguchi.github.io/TS_React_Tetris",
+  "homepage": "https://iriguthi.github.io/TypeScript-React_Tetris/",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

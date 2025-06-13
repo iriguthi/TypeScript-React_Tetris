@@ -17,7 +17,7 @@ export function randomTetromino(): Tetromino {
   // 中央で生成
   const tetrominoWidth = tetromino.shape[0]?.length ?? 1;
   tetromino.x = Math.floor((gridWidth - tetrominoWidth) / 2);
-  tetromino.y = -2
+  // tetromino.y = -2
   return tetromino;
 }
 

@@ -77,24 +77,11 @@ export function rotateTetromino(
 }
 
 // テトロミノ回転(時計回り)
-// どちらを本採用するか迷い中
 function rotateMatrix(matrix: number[][]): number[][] {
-  const mtrlength = matrix.length;
-  const newShape = Array.from({ length: mtrlength }, () => Array(mtrlength).fill(0));
-  for (let y = 0; y < mtrlength; y++) {
-    for (let x = 0; x < mtrlength; x++) {
-      newShape[x][mtrlength - 1 - y] = matrix[y][x];
-    }
+  if(matrix.length === 0) {
+    return []
   }
-  console.log(newShape);
-  return newShape;
+  return matrix[0]!.map((_, colIndex) =>
+    matrix.map(row => row[colIndex] ?? 0).reverse()
+  );
 }
-
-// function rotateMatrix(matrix: number[][]): number[][] {
-//   if(matrix.length === 0) {
-//     return []
-//   }
-//   return matrix[0]!.map((_, colIndex) =>
-//     matrix.map(row => row[colIndex] ?? 0).reverse()
-//   );
-// }

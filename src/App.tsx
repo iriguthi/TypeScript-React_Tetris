@@ -39,7 +39,7 @@ function App() {
 
   // 落下処理
   useEffect(() => {
-      console.log(gameState)
+      // console.log(gameState)
     if(gameState !== "playing") return
   
     const timer = setInterval(() => {

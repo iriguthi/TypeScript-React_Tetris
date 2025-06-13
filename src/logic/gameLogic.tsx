@@ -134,13 +134,13 @@ export function clearLine(grid: number[][]):{
   const lineClear = grid.length - keepGrid.length;
 
   if (lineClear === 4){
-    console.log(lineClear)
+    // console.log(lineClear)
     score += lineClear * 1.5 * 100;
   } else if (lineClear === 3) {
-    console.log(lineClear)
+    // console.log(lineClear)
     score += lineClear * 1.4 * 100;
   } else if (lineClear === 2) {
-    console.log(lineClear)
+    // console.log(lineClear)
     score += lineClear * 1.3 * 100;
   } else {
     score += lineClear * 100;

@@ -26,23 +26,3 @@ body {
     background-color: #ffffff;
   }
 }
-
-.main_container {
-  display: flex;
-  justify-content: center;
-}
-
-.next_container {
-  height: 100px;
-  margin: 0 auto;
-}
-
-.next_container p{
-  margin-top: 10px;
-}
-
-.score,
-.operation,
-.next_container {
-  font-weight: bold;
-}

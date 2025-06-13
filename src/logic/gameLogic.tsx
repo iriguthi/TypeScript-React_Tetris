@@ -2,6 +2,9 @@
 import { Tetromino, gridWidth, TETROMINOS } from "../components/Tetromino";
 import { canMove } from "./TetrominoLogic";
 
+// ゲーム全体のステータス
+export type GameState = "playing" | "paused" | "over";
+
 // 盤面初期化
 export function initialGrid() {
   return Array.from({ length: 20 }, () => Array(10).fill(0));
@@ -21,18 +24,35 @@ export function randomTetromino(): Tetromino {
   return tetromino;
 }
 
-// 既に生成地点にテトロミノゲーム内時間を止める
-let interval = 1000;
-export function dropInterval(
-  gameOver: boolean
-) {
-  if(gameOver){
-    interval = 0;
-  }
+// インターバルを設定
+// let interval = 1000;
+export function dropInterval() {
   // スコア1000pt毎に100msずつインターバルを更新
-  interval = Math.max(1000 - Math.floor(score / 1000) * 100, 100);
+  return Math.max(1000 - Math.floor(score / 1000) * 100, 100);
   // console.log(interval)
-  return interval;
+}
+
+// ゲームフラグを用意
+let gameFlg = false
+export function gamesFlg(){
+  if(!gameFlg) {
+    return gameFlg = true
+  } else {
+    return gameFlg = false
+  }
+}
+// 一時停止
+export let ispaused = false
+export function pause(
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>
+) {
+  if(ispaused) {
+    setGameState('playing');
+    ispaused = false;
+  } else {
+    setGameState('paused');
+    ispaused = true;
+  }
 }
 
 // テトロミノ落下(1秒ごとにY座標1ずつ落下)
@@ -88,7 +108,7 @@ export function spawnCollision(
 // 次のテトロミノを生成
 export function nextTetromino(
   grid: number[][],
-  gameOver: React.Dispatch<React.SetStateAction<boolean>>,
+  setGameState: React.Dispatch<React.SetStateAction<GameState>>,
   setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
   setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
@@ -96,7 +116,7 @@ export function nextTetromino(
   if(spawnCollision(grid, newTetromino)) {
     // 既に生成場所にテトロミノがある場合
     alert("GAME OVER");
-    gameOver(true);
+    setGameState('over');
   } else {
     setTetromino(newTetromino);
     setShouldGenerateNewTetromino(false);
@@ -114,14 +134,18 @@ export function clearLine(grid: number[][]):{
   const lineClear = grid.length - keepGrid.length;
 
   if (lineClear === 4){
-    score += Math.floor(lineClear * 1.5) * 100;
+    console.log(lineClear)
+    score += lineClear * 1.5 * 100;
   } else if (lineClear === 3) {
-    score += Math.floor(lineClear * 1.4) * 100;
+    console.log(lineClear)
+    score += lineClear * 1.4 * 100;
   } else if (lineClear === 2) {
-    score += Math.floor(lineClear * 1.4) * 100;
+    console.log(lineClear)
+    score += lineClear * 1.3 * 100;
   } else {
     score += lineClear * 100;
   }
+  score = Math.floor(score);
   // console.log(score)
   document.getElementById("score")!.innerText = `${score}`
 

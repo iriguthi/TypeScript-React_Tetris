@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import './App.css'
 import Grid from './components/Grid'
 import { Tetromino } from './components/Tetromino';
-import { initialGrid, randomTetromino, dropTetromino, nextTetromino, dropInterval } from './logic/gameLogic';
+import { GameState, initialGrid, randomTetromino, dropTetromino, nextTetromino, dropInterval } from './logic/gameLogic';
 import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
 
 function App() {
@@ -16,7 +16,7 @@ function App() {
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 
   // ゲームステータス
-  const [gameState, setGameState] = useState(false);
+  const [gameState, setGameState] = useState<GameState>("playing");
 
 // console.log(currentTetromino)
   // 表示用グリッド：固定グリッド+現在のテトロミノを合成し出力
@@ -39,11 +39,14 @@ function App() {
 
   // 落下処理
   useEffect(() => {
-  const timer = setInterval(() => {
-    dropTetromino(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino);
-  }, dropInterval(gameState));
-  return () => clearInterval(timer)
-  }, [grid, currentTetromino]);
+      console.log(gameState)
+    if(gameState !== "playing") return
+  
+    const timer = setInterval(() => {
+      dropTetromino(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino);
+    }, dropInterval());
+    return () => clearInterval(timer)
+  }, [grid, currentTetromino, gameState]);
 
   // 次のテトロミノを生成
   useEffect(() => {
@@ -63,7 +66,7 @@ function App() {
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
-      handleKeyPressLogic(event, currentTetrominoRef.current, setCurrentTetromino, gridRef.current);
+      handleKeyPressLogic(event, currentTetrominoRef.current, setCurrentTetromino, gridRef.current, setGameState);
     };
 
     document.addEventListener("keydown", listener);
@@ -92,7 +95,7 @@ function App() {
           <p>↑：回転</p>
           <p>← →：左右移動</p>
           <p>↓：落下</p>
-          {/* <p>SPACE：一時停止</p> */}
+          <p>SPACE：一時停止</p>
         </div>
       </div>
     </div>

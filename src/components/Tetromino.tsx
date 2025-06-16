@@ -19,10 +19,10 @@ export const TETROMINOS: Tetromino[] = [
   // I
   {shape: [
     [0, 0, 0, 0],
-    [0, 0, 0, 0],
     [1, 1, 1, 1],
     [0, 0, 0, 0],
-  ], x: 0, y: -2, colorCode: 1 },
+    [0, 0, 0, 0],
+  ], x: 0, y: -1, colorCode: 1 },
   // Z
   {shape: [
     [1, 1, 0],
@@ -37,10 +37,10 @@ export const TETROMINOS: Tetromino[] = [
   ], x: 0, y: 0, colorCode: 5 },
   // T
   {shape: [
-    [0, 0, 0],
+    [0, 1, 0],
     [1, 1, 1],
-    [0, 1, 0]
-  ], x: 0, y: -1, colorCode: 6 },
+    [0, 0, 0]
+  ], x: 0, y: 0, colorCode: 6 },
   // L
   {shape: [
     [1, 0, 0],

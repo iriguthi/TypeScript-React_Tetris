@@ -2,7 +2,8 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 import './App.css'
-import Grid from './components/Grid'
+import Grid from './components/Grid';
+import NextTetrominoDisplay from './components/NextTetrominoDisplay';
 import { Tetromino } from './components/Tetromino';
 import { GameState, initialGrid, randomTetromino, dropTetromino, nextTetromino, dropInterval } from './logic/gameLogic';
 import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
@@ -13,6 +14,7 @@ function App() {
 
   // テトロミノのステータス
   const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(randomTetromino());
+  const [TetrominoDisplay, setTetrominoDisplay] = useState<Tetromino>(randomTetromino());
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 
   // ゲームステータス
@@ -51,7 +53,7 @@ function App() {
   // 次のテトロミノを生成
   useEffect(() => {
     if (shouldGenerateNewTetromino) {
-      nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino);
+      nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino, TetrominoDisplay, setTetrominoDisplay);
     }
   }, [shouldGenerateNewTetromino]);
 
@@ -82,10 +84,11 @@ function App() {
         <Grid grid={displayGrid} />
       </div>
       <div className="side_container">
-        {/* <div className="next_container">
+        <div className="next_container">
           <p>Next</p>
-          <div id="next_tetromino" className="next_tetromino_box"></div>
-        </div> */}
+          {/* 次弾のテトロミノを表示 */}
+          <NextTetrominoDisplay shape={TetrominoDisplay.shape} colorCode ={TetrominoDisplay.colorCode}/>
+        </div>
         <div className="score">
           <p>Score</p>
           <p id="score">0</p>

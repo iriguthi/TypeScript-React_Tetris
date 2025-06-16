@@ -111,14 +111,16 @@ export function nextTetromino(
   setGameState: React.Dispatch<React.SetStateAction<GameState>>,
   setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
   setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
+  TetrominoDisplay: Tetromino,
+  setTetrominoDisplay: React.Dispatch<React.SetStateAction<Tetromino>>,
 ) {
-  const newTetromino = randomTetromino();
-  if(spawnCollision(grid, newTetromino)) {
+  if(spawnCollision(grid, TetrominoDisplay)) {
     // 既に生成場所にテトロミノがある場合
     alert("GAME OVER");
     setGameState('over');
   } else {
-    setTetromino(newTetromino);
+    setTetromino(TetrominoDisplay);
+    setTetrominoDisplay(randomTetromino());
     setShouldGenerateNewTetromino(false);
   }
 }

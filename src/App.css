@@ -11,25 +11,21 @@
   background-color: aliceblue;
 }
 
-/* .next_container {
-  height: 100px;
-  margin: 0 auto;
-}
-
-.next_container p{
-  margin-top: 10px;
-} */
-
 .score,
 .operation,
 .next_container {
   font-weight: bold;
 }
 
-.operation {
-  margin-top: 100px;
+.next_container {
+  height: 100px;
 }
 
+.score p,
 .operation p{
   margin: 0 0 0 0;
+}
+
+.operation {
+  margin-top: 50px;
 }

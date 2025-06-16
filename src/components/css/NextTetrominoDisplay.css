@@ -1,0 +1,10 @@
+.next-tetromino {
+  display: grid;
+  justify-content: center;
+}
+
+.filled {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #8a8a8a;
+}

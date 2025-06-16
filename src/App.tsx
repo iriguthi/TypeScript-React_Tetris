@@ -5,7 +5,8 @@ import './App.css'
 import Grid from './components/Grid';
 import NextTetrominoDisplay from './components/NextTetrominoDisplay';
 import { Tetromino } from './components/Tetromino';
-import { GameState, initialGrid, randomTetromino, dropTetromino, nextTetromino, dropInterval } from './logic/gameLogic';
+import { GameState, initialGrid, dropTetromino, dropInterval, gameOver } from './logic/gameLogic';
+import { randomTetromino, nextTetromino } from './logic/TetrominoLogic';
 import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
 
 function App() {
@@ -55,7 +56,13 @@ function App() {
     if (shouldGenerateNewTetromino) {
       nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino, TetrominoDisplay, setTetrominoDisplay);
     }
-  }, [shouldGenerateNewTetromino]);
+    console.log(gameState)
+  }, [shouldGenerateNewTetromino, gameState]);
+
+  // ゲームオーバー表示
+  useEffect(() => {
+    gameOver(gameState);
+  }, [gameState]);
 
   // 操作系
   // 毎回最新の状態を保持させる(二重発火させない為)

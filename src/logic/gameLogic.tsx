@@ -1,5 +1,5 @@
 // import Grid from "../components/Grid";
-import { Tetromino, gridWidth, TETROMINOS } from "../components/Tetromino";
+import { Tetromino } from "../components/Tetromino";
 import { canMove } from "./TetrominoLogic";
 
 // ゲーム全体のステータス
@@ -8,20 +8,6 @@ export type GameState = "playing" | "paused" | "over";
 // 盤面初期化
 export function initialGrid() {
   return Array.from({ length: 20 }, () => Array(10).fill(0));
-}
-
-// テトロミノ生成
-// 7種のテトロミノをランダムで生成
-export function randomTetromino(): Tetromino {
-  const random = Math.floor(Math.random() * TETROMINOS.length);
-  // const random = 1
-  const tetromino = {...TETROMINOS[random]};
-
-  // 中央で生成
-  const tetrominoWidth = tetromino.shape[0]?.length ?? 1;
-  tetromino.x = Math.floor((gridWidth - tetrominoWidth) / 2);
-  // tetromino.y = -2
-  return tetromino;
 }
 
 // インターバルを設定
@@ -55,6 +41,13 @@ export function pause(
   }
 }
 
+// ゲームオーバー
+export function gameOver(
+  gameState: GameState
+) {
+  if(gameState === 'over') alert('GAME OVER');
+}
+
 // テトロミノ落下(1秒ごとにY座標1ずつ落下)
 export function dropTetromino(
   grid: number[][],
@@ -86,42 +79,6 @@ export function dropTetromino(
     // グリッドを更新
     setGrid(newGrid);
     setShouldGenerateNewTetromino(true);
-  }
-}
-
-// テトロミノ生成個所に既にテトロミノが存在していないか
-export function spawnCollision(
-  grid: number[][],
-  nextTetromino: Tetromino,
-) {
-  for (let y = 0; y < nextTetromino.shape.length; y++ ) {
-    for (let x = 0; x <nextTetromino.shape[y].length; x++ ) {
-      if (nextTetromino.shape[y][x] !== 0 && grid[nextTetromino.y + y][nextTetromino.x + x] !== 0) {
-        // 既に生成場所にテトロミノがあるかつ盤面が埋まってるときtrueで返す
-        return true
-      }
-    }
-  }
-  return false
-}
-
-// 次のテトロミノを生成
-export function nextTetromino(
-  grid: number[][],
-  setGameState: React.Dispatch<React.SetStateAction<GameState>>,
-  setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
-  setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
-  TetrominoDisplay: Tetromino,
-  setTetrominoDisplay: React.Dispatch<React.SetStateAction<Tetromino>>,
-) {
-  if(spawnCollision(grid, TetrominoDisplay)) {
-    // 既に生成場所にテトロミノがある場合
-    alert("GAME OVER");
-    setGameState('over');
-  } else {
-    setTetromino(TetrominoDisplay);
-    setTetrominoDisplay(randomTetromino());
-    setShouldGenerateNewTetromino(false);
   }
 }
 

@@ -116,3 +116,38 @@ export function clearLine(grid: number[][]):{
 
   return {newGrid, lineClear};
 }
+
+// ホールド機能
+let holdFlg = false;
+export function holdTetromino(
+  currentTetromino: Tetromino,
+  setCurrentTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
+  HoldTetromino: Tetromino | null,
+  setHoldTetromino: React.Dispatch<React.SetStateAction<Tetromino | null>>,
+  TetrominoDisplay: Tetromino,
+){
+  if(!HoldTetromino) {
+    setHoldTetromino({
+      shape: currentTetromino.shape,
+      colorCode: currentTetromino.colorCode,
+      x: 0,
+      y: 0
+    });
+    setCurrentTetromino(TetrominoDisplay);
+    holdFlg = true
+  } else {
+    setCurrentTetromino({
+      shape: HoldTetromino.shape,
+      colorCode: HoldTetromino.colorCode,
+      x: Math.floor(10 / 2) - Math.ceil(HoldTetromino.shape[0].length / 2),
+      y: 0
+    });
+    setHoldTetromino({
+      shape: currentTetromino.shape,
+      colorCode: currentTetromino.colorCode,
+      x: 0,
+      y: 0
+    });
+    holdFlg = false;
+  }
+}

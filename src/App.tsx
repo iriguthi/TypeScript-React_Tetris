@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 // import viteLogo from '/vite.svg'
 import './App.css'
 import Grid from './components/Grid';
-import NextTetrominoDisplay from './components/NextTetrominoDisplay';
+import TetrominoDisplay from './components/TetrominoDisplay';
 import { Tetromino } from './components/Tetromino';
 import { GameState, initialGrid, dropTetromino, dropInterval, gameOver } from './logic/gameLogic';
 import { randomTetromino, nextTetromino } from './logic/TetrominoLogic';
@@ -15,7 +15,8 @@ function App() {
 
   // テトロミノのステータス
   const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(randomTetromino());
-  const [TetrominoDisplay, setTetrominoDisplay] = useState<Tetromino>(randomTetromino());
+  const [TetrominoDisplays, setTetrominoDisplay] = useState<Tetromino>(randomTetromino());
+  const [HoldTetromino, setHoldTetromino] = useState<Tetromino | null>(null);
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 
   // ゲームステータス
@@ -54,9 +55,9 @@ function App() {
   // 次のテトロミノを生成
   useEffect(() => {
     if (shouldGenerateNewTetromino) {
-      nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino, TetrominoDisplay, setTetrominoDisplay);
+      nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino, TetrominoDisplays, setTetrominoDisplay);
     }
-    console.log(gameState)
+    // console.log(gameState)
   }, [shouldGenerateNewTetromino, gameState]);
 
   // ゲームオーバー表示
@@ -75,37 +76,51 @@ function App() {
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
-      handleKeyPressLogic(event, currentTetrominoRef.current, setCurrentTetromino, gridRef.current, setGameState);
+      handleKeyPressLogic(event,
+        currentTetrominoRef.current,
+        setCurrentTetromino,
+        gridRef.current,
+        setGameState,
+        HoldTetromino,
+        setHoldTetromino,
+        TetrominoDisplays);
     };
 
     document.addEventListener("keydown", listener);
     return () => {
       document.removeEventListener("keydown", listener);
     };
-  }, []);
+  }, [currentTetromino,HoldTetromino]);
 
   return (
     <div className="main_container">
-      <div className="grid">
-        {/* Tetrisのゲーム盤を表示 */}
-        <Grid grid={displayGrid} />
-      </div>
-      <div className="side_container">
-        <div className="next_container">
-          <p>Next</p>
-          {/* 次弾のテトロミノを表示 */}
-          <NextTetrominoDisplay shape={TetrominoDisplay.shape} colorCode ={TetrominoDisplay.colorCode}/>
-        </div>
-        <div className="score">
-          <p>Score</p>
-          <p id="score">0</p>
+      <div className='left_side_container'>
+        <div className='hold_container'>
+          <p>Hold</p>
+          {HoldTetromino && (<TetrominoDisplay shape={HoldTetromino.shape} colorCode={HoldTetromino.colorCode}/>)}
         </div>
         <div className="operation">
           <p>操作</p>
           <p>↑：回転</p>
           <p>← →：左右移動</p>
           <p>↓：落下</p>
+          <p>SHIFT：ホールド</p>
           <p>SPACE：一時停止</p>
+        </div>
+      </div>
+      <div className="grid">
+        {/* Tetrisのゲーム盤を表示 */}
+        <Grid grid={displayGrid} />
+      </div>
+      <div className="right_side_container">
+        <div className="next_container">
+          <p>Next</p>
+          {/* 次弾のテトロミノを表示 */}
+          <TetrominoDisplay shape={TetrominoDisplays.shape} colorCode ={TetrominoDisplays.colorCode}/>
+        </div>
+        <div className="score">
+          <p>Score</p>
+          <p id="score">0</p>
         </div>
       </div>
     </div>

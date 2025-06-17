@@ -1,11 +1,11 @@
-import './css/NextTetrominoDisplay.css'
+import './css/TetrominoDisplay.css'
 
 type Props = {
   shape: number[][],
   colorCode: number
 };
 
-function NextTetrominoDisplay({ shape, colorCode }: Props) {
+function TetrominoDisplay({ shape, colorCode }: Props) {
   return (
     <div
       className="next-tetromino"
@@ -32,4 +32,4 @@ function NextTetrominoDisplay({ shape, colorCode }: Props) {
   );
 }
 
-export default NextTetrominoDisplay;
+export default TetrominoDisplay;

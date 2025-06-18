@@ -16,7 +16,6 @@ export function handleKeyPressLogic(
   TetrominoDisplay: Tetromino,
   isPressedRef: React.RefObject<boolean>,
 ) {
-  isPressedRef.current = true;
   switch (event.key) {
     case "ArrowLeft":
       // 左移動
@@ -38,7 +37,8 @@ export function handleKeyPressLogic(
       }
       break;
     case "ArrowDown":
-      // 右移動
+      // 下移動
+      isPressedRef.current = true;
       if (canMove(grid, currentTetromino, 0, 1) && !ispaused) {
         setCurrentTetromino(prev => ({...prev, y: prev.y +1}));
       }
@@ -56,5 +56,5 @@ export function handleKeyPressLogic(
     default:
     break;
   }
-  isPressedRef.current = false;
+  // isPressedRef.current = false;
 }

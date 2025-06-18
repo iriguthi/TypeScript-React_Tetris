@@ -11,11 +11,12 @@ export function initialGrid() {
 }
 
 // インターバルを設定
-// let interval = 1000;
-export function dropInterval() {
+export let interval = 1000;
+export function dropInterval(score: number) {
   // スコア1000pt毎に100msずつインターバルを更新
-  return Math.max(1000 - Math.floor(score / 1000) * 100, 100);
+  interval = Math.max(1000 - Math.floor(score / 1000) * 100, 100);
   // console.log(interval)
+  return interval
 }
 
 // ゲームフラグを用意
@@ -58,8 +59,21 @@ export function dropTetromino(
   isPressedRef: React.RefObject<boolean>,
 ) {
   // console.log(grid)
-  if (isPressedRef.current) return;
+  if (isPressedRef.current) {
+    return isPressedRef.current = false;
+  } else {
+    drop(grid, setGrid, currentTetromino, setTetromino,setShouldGenerateNewTetromino);
+  };
+}
 
+// 落下処理
+export function drop(
+  grid: number[][],
+  setGrid: React.Dispatch<React.SetStateAction<number[][]>>,
+  currentTetromino: Tetromino,
+  setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
+  setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
+) {
   if (canMove(grid, currentTetromino, 0, 1)) {
     // 移動可能なら落下させる
     setTetromino(prev =>({...prev, y:prev.y + 1}));
@@ -111,6 +125,7 @@ export function clearLine(grid: number[][]):{
     score += lineClear * 100;
   }
   score = Math.floor(score);
+  dropInterval(score);
   // console.log(score)
   document.getElementById("score")!.innerText = `${score}`
 

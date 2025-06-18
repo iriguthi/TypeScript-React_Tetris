@@ -5,7 +5,7 @@ import './App.css'
 import Grid from './components/Grid';
 import TetrominoDisplay from './components/TetrominoDisplay';
 import { Tetromino } from './components/Tetromino';
-import { GameState, initialGrid, dropTetromino, dropInterval, gameOver } from './logic/gameLogic';
+import { GameState, initialGrid, dropTetromino, gameOver, interval } from './logic/gameLogic';
 import { randomTetromino, nextTetromino } from './logic/TetrominoLogic';
 import { handleKeyPressLogic } from './logic/handleKeyPressLogic';
 
@@ -58,7 +58,7 @@ function App() {
         setShouldGenerateNewTetromino,
         isPressedRef
       );
-    }, dropInterval());
+    }, interval);
     return () => clearInterval(timer)
   }, [gameState]);
 

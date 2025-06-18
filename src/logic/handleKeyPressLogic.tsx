@@ -1,7 +1,9 @@
 import { canMove, canRotate, rotateTetromino } from "./TetrominoLogic";
 import { Tetromino } from "../components/Tetromino";
-import { GameState, pause, ispaused, holdTetromino} from "./gameLogic";
+import { GameState, pause, ispaused, holdTetromino, isHold} from "./gameLogic";
 
+// 操作中かどうか
+export let isPressed = false
 // 操作系
 export function handleKeyPressLogic(
   event: KeyboardEvent,
@@ -12,7 +14,9 @@ export function handleKeyPressLogic(
   HoldTetromino: Tetromino | null,
   setHoldTetromino: React.Dispatch<React.SetStateAction<Tetromino | null>>,
   TetrominoDisplay: Tetromino,
+  isPressedRef: React.RefObject<boolean>,
 ) {
+  isPressedRef.current = true;
   switch (event.key) {
     case "ArrowLeft":
       // 左移動
@@ -44,7 +48,7 @@ export function handleKeyPressLogic(
         break
 
       case "Shift":
-        if(!ispaused) {
+        if(!isHold && !ispaused) {
           holdTetromino(currentTetromino, setCurrentTetromino, HoldTetromino, setHoldTetromino, TetrominoDisplay);
         }
         break
@@ -52,4 +56,5 @@ export function handleKeyPressLogic(
     default:
     break;
   }
+  isPressedRef.current = false;
 }

@@ -22,6 +22,9 @@ function App() {
   // ゲームステータス
   const [gameState, setGameState] = useState<GameState>("playing");
 
+  // 操作中かを判断
+  const isPressedRef = useRef(false);
+
 // console.log(currentTetromino)
   // 表示用グリッド：固定グリッド+現在のテトロミノを合成し出力
   const displayGrid = useMemo(() => {
@@ -47,15 +50,29 @@ function App() {
     if(gameState !== "playing") return
   
     const timer = setInterval(() => {
-      dropTetromino(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino);
+      dropTetromino(
+        gridRef.current,
+        setGrid,
+        currentTetrominoRef.current,
+        setCurrentTetromino,
+        setShouldGenerateNewTetromino,
+        isPressedRef
+      );
     }, dropInterval());
     return () => clearInterval(timer)
-  }, [grid, currentTetromino, gameState]);
+  }, [gameState]);
 
   // 次のテトロミノを生成
   useEffect(() => {
     if (shouldGenerateNewTetromino) {
-      nextTetromino(grid, setGameState, setCurrentTetromino, setShouldGenerateNewTetromino, TetrominoDisplays, setTetrominoDisplay);
+      nextTetromino(
+        grid,
+        setGameState,
+        setCurrentTetromino,
+        setShouldGenerateNewTetromino,
+        TetrominoDisplays,
+        setTetrominoDisplay
+      );
     }
     // console.log(gameState)
   }, [shouldGenerateNewTetromino, gameState]);
@@ -76,14 +93,17 @@ function App() {
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
-      handleKeyPressLogic(event,
+      handleKeyPressLogic(
+        event,
         currentTetrominoRef.current,
         setCurrentTetromino,
         gridRef.current,
         setGameState,
         HoldTetromino,
         setHoldTetromino,
-        TetrominoDisplays);
+        TetrominoDisplays,
+        isPressedRef,
+      );
     };
 
     document.addEventListener("keydown", listener);

@@ -1,5 +1,5 @@
 // import Grid from "../components/Grid";
-import { Tetromino } from "../components/Tetromino";
+import { Tetromino, TETROMINOS, TetrominoType } from "../components/Tetromino";
 import { canMove } from "./TetrominoLogic";
 
 // ゲーム全体のステータス
@@ -55,8 +55,11 @@ export function dropTetromino(
   currentTetromino: Tetromino,
   setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
   setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
+  isPressedRef: React.RefObject<boolean>,
 ) {
   // console.log(grid)
+  if (isPressedRef.current) return;
+
   if (canMove(grid, currentTetromino, 0, 1)) {
     // 移動可能なら落下させる
     setTetromino(prev =>({...prev, y:prev.y + 1}));
@@ -79,6 +82,9 @@ export function dropTetromino(
     // グリッドを更新
     setGrid(newGrid);
     setShouldGenerateNewTetromino(true);
+
+    // テトロミノが設置されたときにfalse戻す
+    isHold = false;
   }
 }
 
@@ -118,7 +124,6 @@ export function clearLine(grid: number[][]):{
 }
 
 // ホールド機能
-let holdFlg = false;
 export function holdTetromino(
   currentTetromino: Tetromino,
   setCurrentTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
@@ -126,28 +131,38 @@ export function holdTetromino(
   setHoldTetromino: React.Dispatch<React.SetStateAction<Tetromino | null>>,
   TetrominoDisplay: Tetromino,
 ){
+
+  function getInitialTetrominoShape(type: TetrominoType): Tetromino {
+    const tetromino = TETROMINOS.find(t => t.type === type);
+    // nullが来る場合の考慮non-null使わない場合は下記をコメントインする
+    // if (!tetromino) throw new Error("Invalid tetromino type: " + type);
+    return tetromino!;
+  }
+
+  hold()
+  const holdTetromino = getInitialTetrominoShape(currentTetromino.type)
   if(!HoldTetromino) {
-    setHoldTetromino({
-      shape: currentTetromino.shape,
-      colorCode: currentTetromino.colorCode,
-      x: 0,
-      y: 0
-    });
+    setHoldTetromino(holdTetromino);
     setCurrentTetromino(TetrominoDisplay);
-    holdFlg = true
   } else {
     setCurrentTetromino({
       shape: HoldTetromino.shape,
       colorCode: HoldTetromino.colorCode,
       x: Math.floor(10 / 2) - Math.ceil(HoldTetromino.shape[0].length / 2),
-      y: 0
+      y: HoldTetromino.y,
+      type: currentTetromino.type,
     });
-    setHoldTetromino({
-      shape: currentTetromino.shape,
-      colorCode: currentTetromino.colorCode,
-      x: 0,
-      y: 0
-    });
-    holdFlg = false;
+    setHoldTetromino(holdTetromino);
+  }
+}
+
+// 複数回ホールドできないように制御する
+// 一度ホールドしたらテトロミノが設置されるまでは不可
+export let isHold = false
+export function hold(){
+  if(isHold) {
+    isHold = false
+  } else {
+    isHold = true;
   }
 }

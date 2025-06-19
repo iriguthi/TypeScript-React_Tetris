@@ -59,14 +59,16 @@ export function dropTetromino(
   isPressedRef: React.RefObject<boolean>,
 ) {
   // console.log(grid)
+  // console.log(isPressedRef.current, performance.now())
   if (isPressedRef.current) {
-    return isPressedRef.current = false;
+    isPressedRef.current = false;
+    return
   } else {
     drop(grid, setGrid, currentTetromino, setTetromino,setShouldGenerateNewTetromino);
   };
 }
 
-// 落下処理
+// 落下処理(インターバル落下でも使用するためこちらに記載)
 export function drop(
   grid: number[][],
   setGrid: React.Dispatch<React.SetStateAction<number[][]>>,
@@ -91,15 +93,22 @@ export function drop(
         }
       });
     });
-
+    // console.log("drop fired", performance.now());
     const { newGrid } = clearLine(upDateGrid);
     // グリッドを更新
     setGrid(newGrid);
-    setShouldGenerateNewTetromino(true);
+    requestGenerate(setShouldGenerateNewTetromino)
+    // setShouldGenerateNewTetromino(true);
 
     // テトロミノが設置されたときにfalse戻す
     isHold = false;
   }
+}
+
+function requestGenerate(
+  setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  setShouldGenerateNewTetromino(prev => (prev ? prev : true));
 }
 
 // 揃ったラインの削除

@@ -81,6 +81,20 @@ export function canMove(
   });
 }
 
+// テトロミノ移動(左右)
+export function move(
+  grid: number[][],
+  currentTetromino: Tetromino,
+  setTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
+  dx: number,
+  dy: number,
+) {
+  if (canMove(grid, currentTetromino, dx, dy)) {
+    // 移動可能なら落下させる
+    setTetromino(prev =>({...prev, x:prev.x + dx}));
+  }
+}
+
 // テトロミノ回転可否
 export function canRotate(
   grid: number[][],

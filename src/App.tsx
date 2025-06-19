@@ -91,18 +91,30 @@ function App() {
     gridRef.current = grid;
   }, [currentTetromino, grid]);
 
+  // 操作時の重複発火対策で55ms間は処理を受け付けない
+  const isKeyDownRef = useRef<number>(0);
+  const KEY_REPEAT_INTERVAL = 55;
+
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
+      // 前回操作から55ms立ってない場合は操作を受け付けない
+      const now = Date.now();
+      if (now - isKeyDownRef.current <= KEY_REPEAT_INTERVAL) return
+
+      isKeyDownRef.current = now;
+
       handleKeyPressLogic(
         event,
         currentTetrominoRef.current,
         setCurrentTetromino,
         gridRef.current,
+        setGrid,
         setGameState,
         HoldTetromino,
         setHoldTetromino,
         TetrominoDisplays,
         isPressedRef,
+        setShouldGenerateNewTetromino
       );
     };
 

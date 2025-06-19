@@ -1,37 +1,40 @@
-import { canMove, canRotate, rotateTetromino } from "./TetrominoLogic";
+import { rotateTetromino, move } from "./TetrominoLogic";
 import { Tetromino } from "../components/Tetromino";
-import { GameState, pause, ispaused, holdTetromino, isHold} from "./gameLogic";
+import { GameState, pause, ispaused, holdTetromino, isHold, drop} from "./gameLogic";
 
 // 操作中かどうか
 export let isPressed = false
+
 // 操作系
 export function handleKeyPressLogic(
   event: KeyboardEvent,
   currentTetromino: Tetromino,
   setCurrentTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
   grid: number[][],
+  setGrid: React.Dispatch<React.SetStateAction<number[][]>>,
   setGameState: React.Dispatch<React.SetStateAction<GameState>>,
   HoldTetromino: Tetromino | null,
   setHoldTetromino: React.Dispatch<React.SetStateAction<Tetromino | null>>,
   TetrominoDisplay: Tetromino,
   isPressedRef: React.RefObject<boolean>,
+  setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
   switch (event.key) {
     case "ArrowLeft":
       // 左移動
-      if (canMove(grid, currentTetromino, -1, 0) && !ispaused) {
-        setCurrentTetromino(prev => ({...prev, x: prev.x -1}));
+      if (!ispaused) {
+        move(grid, currentTetromino, setCurrentTetromino, -1 , 0)
       }
       break;
     case "ArrowRight":
       // 右移動
-      if (canMove(grid, currentTetromino, 1, 0) && !ispaused) {
-        setCurrentTetromino(prev => ({...prev, x: prev.x +1}));
+      if (!ispaused) {
+        move(grid, currentTetromino, setCurrentTetromino, 1 , 0)
       }
       break;
     case "ArrowUp":
       // 回転
-      if (canRotate(grid, currentTetromino) && !ispaused) {
+      if (!ispaused) {
         const rotated = rotateTetromino(grid, currentTetromino)
         setCurrentTetromino(rotated);
       }
@@ -39,8 +42,8 @@ export function handleKeyPressLogic(
     case "ArrowDown":
       // 下移動
       isPressedRef.current = true;
-      if (canMove(grid, currentTetromino, 0, 1) && !ispaused) {
-        setCurrentTetromino(prev => ({...prev, y: prev.y +1}));
+      if (!ispaused) {
+        drop(grid, setGrid, currentTetromino, setCurrentTetromino, setShouldGenerateNewTetromino)
       }
       break;
       case " ":

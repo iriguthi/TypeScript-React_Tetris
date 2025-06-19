@@ -37,7 +37,7 @@ export const TETROMINOS: Tetromino[] = [
     [0, 1, 1],
     [1, 1, 0],
     [0, 0, 0],
-  ], x: 0, y: 0, colorCode: 5, type: 'Z' },
+  ], x: 0, y: 0, colorCode: 5, type: 'S' },
   // T
   {shape: [
     [0, 1, 0],

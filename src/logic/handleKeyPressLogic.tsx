@@ -35,8 +35,7 @@ export function handleKeyPressLogic(
     case "ArrowUp":
       // 回転
       if (!ispaused) {
-        const rotated = rotateTetromino(grid, currentTetromino)
-        setCurrentTetromino(rotated);
+        rotateTetromino(grid, currentTetromino, setCurrentTetromino)
       }
       break;
     case "ArrowDown":
@@ -47,10 +46,12 @@ export function handleKeyPressLogic(
       }
       break;
       case " ":
+        // 一時停止
         pause(setGameState);
         break
 
       case "Shift":
+        // ホールド
         if(!isHold && !ispaused) {
           holdTetromino(currentTetromino, setCurrentTetromino, HoldTetromino, setHoldTetromino, TetrominoDisplay);
         }
@@ -59,5 +60,4 @@ export function handleKeyPressLogic(
     default:
     break;
   }
-  // isPressedRef.current = false;
 }

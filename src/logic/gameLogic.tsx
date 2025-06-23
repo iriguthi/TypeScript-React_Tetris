@@ -81,20 +81,20 @@ export function drop(
     setTetromino(prev =>({...prev, y:prev.y + 1}));
   } else {
     // 固定処理
-    const upDateGrid = grid.map(row => [...row]);
+    const updateGrid = grid.map(row => [...row]);
     currentTetromino.shape.forEach((row, dy) => {
       row.forEach((cell, dx) => {
         if (cell) {
           const x = currentTetromino.x + dx;
           const y = currentTetromino.y + dy;
-          if (y >= 0 && y < upDateGrid.length && x >= 0 && x < upDateGrid[0].length) {
-            upDateGrid[y][x] = currentTetromino.colorCode;
+          if (y >= 0 && y < updateGrid.length && x >= 0 && x < updateGrid[0].length) {
+            updateGrid[y][x] = currentTetromino.colorCode;
           }
         }
       });
     });
     // console.log("drop fired", performance.now());
-    const { newGrid } = clearLine(upDateGrid);
+    const { newGrid } = clearLine(updateGrid);
     // グリッドを更新
     setGrid(newGrid);
     requestGenerate(setShouldGenerateNewTetromino)

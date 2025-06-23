@@ -98,9 +98,9 @@ export function move(
 // テトロミノ回転可否
 export function canRotate(
   grid: number[][],
+  newMatrix: number[][],
   tetromino: Tetromino,
 ): boolean {
-  const newMatrix = rotateMatrix(tetromino.shape);
   return newMatrix.every((row, dy) => {
     return row.every((value, dx) => {
       if (value === 0) return true;
@@ -128,17 +128,18 @@ export function canRotate(
 export function rotateTetromino(
   grid: number[][],
   tetromino: Tetromino,
+  setCurrentTetromino: React.Dispatch<React.SetStateAction<Tetromino>>,
 ) {
   const newMatrix = rotateMatrix(tetromino.shape);
 
-  if (canRotate(grid, {...tetromino, shape: newMatrix})) {
-    return {
+  if (canRotate(grid, newMatrix, tetromino)) {
+    return setCurrentTetromino({
       ...tetromino,
       shape: newMatrix,
-    }
+    })
   }
 
-  return tetromino
+  return setCurrentTetromino(tetromino);
 }
 
 // テトロミノ回転(時計回り)

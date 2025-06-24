@@ -114,7 +114,8 @@ function App() {
         setHoldTetromino,
         TetrominoDisplays,
         isPressedRef,
-        setShouldGenerateNewTetromino
+        setShouldGenerateNewTetromino,
+        setTetrominoDisplay,
       );
     };
 

@@ -1,6 +1,6 @@
 // import Grid from "../components/Grid";
 import { Tetromino, TETROMINOS, TetrominoType } from "../components/Tetromino";
-import { canMove } from "./TetrominoLogic";
+import { canMove, randomTetromino } from "./TetrominoLogic";
 
 // ゲーム全体のステータス
 export type GameState = "playing" | "paused" | "over";
@@ -154,6 +154,7 @@ export function holdTetromino(
   HoldTetromino: Tetromino | null,
   setHoldTetromino: React.Dispatch<React.SetStateAction<Tetromino | null>>,
   TetrominoDisplay: Tetromino,
+  setTetrominoDisplay: React.Dispatch<React.SetStateAction<Tetromino>>,
 ){
 
   function getInitialTetrominoShape(type: TetrominoType): Tetromino {
@@ -168,6 +169,7 @@ export function holdTetromino(
   if(!HoldTetromino) {
     setHoldTetromino(holdTetromino);
     setCurrentTetromino(TetrominoDisplay);
+    setTetrominoDisplay(randomTetromino())
   } else {
     setCurrentTetromino({
       shape: HoldTetromino.shape,

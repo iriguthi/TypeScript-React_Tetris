@@ -18,6 +18,7 @@ export function handleKeyPressLogic(
   TetrominoDisplay: Tetromino,
   isPressedRef: React.RefObject<boolean>,
   setShouldGenerateNewTetromino: React.Dispatch<React.SetStateAction<boolean>>,
+  setTetrominoDisplay: React.Dispatch<React.SetStateAction<Tetromino>>,
 ) {
   switch (event.key) {
     case "ArrowLeft":
@@ -53,7 +54,7 @@ export function handleKeyPressLogic(
       case "Shift":
         // ホールド
         if(!isHold && !ispaused) {
-          holdTetromino(currentTetromino, setCurrentTetromino, HoldTetromino, setHoldTetromino, TetrominoDisplay);
+          holdTetromino(currentTetromino, setCurrentTetromino, HoldTetromino, setHoldTetromino, TetrominoDisplay, setTetrominoDisplay);
         }
         break
 

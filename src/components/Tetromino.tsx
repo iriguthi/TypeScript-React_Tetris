@@ -49,11 +49,11 @@ export const TETROMINOS: Tetromino[] = [
     [1, 0, 0],
     [1, 1, 1],
     [0, 0, 0]
-  ], x: 0, y: 0, colorCode: 3, type: 'L' },
+  ], x: 0, y: 0, colorCode: 3, type: 'J' },
   // J
   {shape: [
     [0, 0, 1],
     [1, 1, 1],
     [0, 0, 0]
-  ], x: 0, y: 0, colorCode: 2, type: 'J' },
+  ], x: 0, y: 0, colorCode: 2, type: 'L' },
 ];

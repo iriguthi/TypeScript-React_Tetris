@@ -14,8 +14,8 @@ function App() {
   const[grid, setGrid] = useState(initialGrid);
 
   // テトロミノのステータス
-  const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(randomTetromino());
-  const [TetrominoDisplays, setTetrominoDisplay] = useState<Tetromino>(randomTetromino());
+  const [currentTetromino, setCurrentTetromino] = useState<Tetromino>(() => randomTetromino());
+  const [TetrominoDisplays, setTetrominoDisplay] = useState<Tetromino>(() => randomTetromino());
   const [HoldTetromino, setHoldTetromino] = useState<Tetromino | null>(null);
   const [shouldGenerateNewTetromino, setShouldGenerateNewTetromino] = useState(false);
 

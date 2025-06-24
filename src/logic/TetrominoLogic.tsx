@@ -4,12 +4,23 @@ import { GameState } from "./gameLogic";
 
 // テトロミノ生成
 // 7種のテトロミノをランダムで生成
+let tetrominoBag:Tetromino[] = []
 export function randomTetromino(): Tetromino {
-  const random = Math.floor(Math.random() * TETROMINOS.length);
-  // const random = 1
-  const tetromino = {...TETROMINOS[random]};
+  if (tetrominoBag.length === 0) {
+    // 配列が空ならテトロミノ7種をランダムの順に格納する
+  const bag = [...TETROMINOS];
+    for (let i = bag.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [bag[i],bag[j]] = [bag[j], bag[i]]
+    }
+    tetrominoBag = bag
+  }
 
-  // 中央で生成
+  // 配列末尾から取得
+  const tetromino = {...tetrominoBag.pop()!};
+  // console.log(tetrominoBag)
+
+  // // 中央で生成
   const tetrominoWidth = tetromino.shape[0]?.length ?? 1;
   tetromino.x = Math.floor((gridWidth - tetrominoWidth) / 2);
   // tetromino.y = -2

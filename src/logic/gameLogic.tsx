@@ -169,7 +169,7 @@ export function holdTetromino(
   if(!HoldTetromino) {
     setHoldTetromino(holdTetromino);
     setCurrentTetromino(TetrominoDisplay);
-    setTetrominoDisplay(randomTetromino())
+    setTetrominoDisplay(randomTetromino());
   } else {
     setCurrentTetromino({
       shape: HoldTetromino.shape,

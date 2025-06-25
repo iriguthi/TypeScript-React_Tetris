@@ -136,6 +136,7 @@ export function canRotate(
 }
 
 // テトロミノ回転
+const kick = [0, -1, 1, -2, 2]
 export function rotateTetromino(
   grid: number[][],
   tetromino: Tetromino,
@@ -143,11 +144,14 @@ export function rotateTetromino(
 ) {
   const newMatrix = rotateMatrix(tetromino.shape);
 
-  if (canRotate(grid, newMatrix, tetromino)) {
-    return setCurrentTetromino({
-      ...tetromino,
-      shape: newMatrix,
-    })
+  for (let dx of kick) {
+    const testTetromino = {...tetromino, x: tetromino.x + dx}
+    if (canRotate(grid, newMatrix, testTetromino)) {
+      return setCurrentTetromino({
+        ...testTetromino,
+        shape: newMatrix,
+      })
+    }
   }
 
   return setCurrentTetromino(tetromino);
